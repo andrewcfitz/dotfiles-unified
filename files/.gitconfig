@@ -1,0 +1,34 @@
+[color]
+  ui = auto
+  interactive = auto
+  status = auto
+  commit = auto
+  diff = auto
+  branch = auto
+[apply]
+  whitespace = strip
+  whitespace = nowarn
+[push]
+  default = simple
+[user]
+	name = andrewcfitz
+	email = andrew@fitz.biz
+[core]
+  excludesfile = ~/.gitignore
+  eof = lf
+  autocrlf = input
+[filter "lfs"]
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+[init]
+  defaultBranch = main
+[alias]
+  co = checkout
+[credential "https://github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[credential]
+	helper = store
