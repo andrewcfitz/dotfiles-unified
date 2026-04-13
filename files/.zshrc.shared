@@ -1,9 +1,10 @@
 export STARSHIP_CONFIG=~/.starship.toml
 
-export DOTNET_ROOT="$HOME/.dotnet"
-export PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
+export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
+export PATH="$PATH:$DOTNET_ROOT:$HOME/.dotnet/tools"
 export PATH="$PATH:$HOME/workspace/dotfiles/shared/bin"
 export PATH="$PATH:$HOME/.local/bin"
+export PATH="$HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnubin:$PATH"
 
 fpath=(/Applications/Docker.app/Contents/Resources/etc $fpath)
 
@@ -45,3 +46,4 @@ bindkey '^[OB' down-line-or-beginning-search  # Down arrow (application mode)
 
 eval "$(starship init zsh)"
 eval "$(mise activate zsh)"
+export MISE_EXPERIMENTAL=1
