@@ -11,6 +11,8 @@ cask "1password"
 cask "docker-desktop"
 cask "ghostty"
 cask "handy"
+cask "google-chrome"
+cask "firefox"
 
 # CLI tools
 brew "eza"
