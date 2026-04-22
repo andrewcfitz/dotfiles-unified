@@ -42,6 +42,7 @@ alias claude="claude --allow-dangerously-skip-permissions --permission-mode bypa
 alias k="kubectl"
 
 alias axon="clear && cd ~/workspace/evolution/axon/"
+alias dotfiles="clear && cd ~/workspace/dotfiles/"
 alias bootstrap="(cd ~/workspace/dotfiles && ./bootstrap.sh)"
 
 alias build="docker compose build"
