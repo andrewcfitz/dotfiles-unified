@@ -168,6 +168,13 @@ if should_run SYMLINKS; then
         symlink_files "$DOTFILES_DIR/shared/files"
     fi
     symlink_files "$DOTFILES_DIR/files"
+
+    # VS Code on macOS doesn't honor XDG; redirect its settings.json to ~/.config
+    log_action "Linking VS Code settings.json to ~/.config..."
+    VSCODE_USER_DIR="$HOME/Library/Application Support/Code/User"
+    mkdir -p "$VSCODE_USER_DIR"
+    ln -sfn "$HOME/.config/Code/User/settings.json" "$VSCODE_USER_DIR/settings.json"
+
     log_info "Symlinks up to date"
 fi
 

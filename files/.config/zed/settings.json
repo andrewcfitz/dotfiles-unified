@@ -1,5 +1,23 @@
 {
-  "cli_default_open_behavior": "existing_window",
+  "ssh_connections": [
+    {
+      "host": "andrew-mac-studio.fitzy.foo",
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/Users/andrew"
+          ]
+        },
+        {
+          "paths": [
+            "/Users/andrew/workspace/louie-camp/main/./"
+          ]
+        }
+      ]
+    }
+  ],
+  "cli_default_open_behavior": "new_window",
   "agent_servers": {
     "claude-acp": {
       "type": "registry"
