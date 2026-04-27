@@ -45,6 +45,18 @@ bindkey '^[[B' down-line-or-beginning-search  # Down arrow (normal mode)
 bindkey '^[OA' up-line-or-beginning-search    # Up arrow (application mode, e.g. inside tmux)
 bindkey '^[OB' down-line-or-beginning-search  # Down arrow (application mode)
 
+# Ctrl+K: clear screen + scrollback at empty prompt; otherwise default kill-line
+ctrl-k-smart() {
+  if [[ -z $BUFFER ]]; then
+    zle clear-screen
+    printf '\033[3J' > /dev/tty
+  else
+    zle kill-line
+  fi
+}
+zle -N ctrl-k-smart
+bindkey '^K' ctrl-k-smart
+
 # Option+Arrow: move by word
 bindkey '^[b' backward-word        # Option+Left (Esc+ mode)
 bindkey '^[f' forward-word         # Option+Right (Esc+ mode)
