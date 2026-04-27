@@ -8,6 +8,7 @@ $directory\
 [](bg:yellow fg:peach)\
 $git_branch\
 $git_status\
+${custom.git_ahead_behind}\
 [](fg:yellow bg:green)\
 $c\
 $rust\
@@ -86,6 +87,25 @@ truncation_symbol = "…"
 [git_status]
 style = "bg:yellow"
 format = '[[($all_status$ahead_behind )](fg:crust bg:yellow)]($style)'
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇡${ahead_count}⇣${behind_count}"
+
+[custom.git_ahead_behind]
+description = "Git ahead/behind for bare repo worktrees"
+command = '''
+count=$(git rev-list --left-right --count HEAD...@{upstream} 2>/dev/null) || exit 1
+ahead=$(echo "$count" | cut -f1)
+behind=$(echo "$count" | cut -f2)
+result=""
+[ "$ahead" -gt 0 ] && result="⇡${ahead}"
+[ "$behind" -gt 0 ] && result="${result}⇣${behind}"
+[ -n "$result" ] && echo "$result"
+'''
+when = "git rev-parse --is-inside-work-tree 2>/dev/null && [ -z \"$(starship module git_status 2>/dev/null)\" ]"
+style = "fg:crust bg:yellow"
+format = '[[$output ](fg:crust bg:yellow)]($style)'
+shell = ["bash", "--noprofile", "--norc"]
 
 [nodejs]
 symbol = ""

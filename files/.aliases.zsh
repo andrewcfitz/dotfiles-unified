@@ -38,7 +38,6 @@ alias mv='mv -v'
 alias uuid="uuidgen | tr -d '\n' | tr '[:upper:]' '[:lower:]'  | pbcopy && pbpaste && echo"
 alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
 
-alias claude="claude --allow-dangerously-skip-permissions --permission-mode bypassPermissions"
 alias k="kubectl"
 
 alias axon="clear && cd ~/workspace/evolution/axon/"

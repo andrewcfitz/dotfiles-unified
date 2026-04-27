@@ -2,3 +2,4 @@ font-size = 14
 theme = dark:Dracula,light:Dracula
 working-directory = ~/workspace
 keybind = cmd+k=text:\x0b
+desktop-notifications = true
