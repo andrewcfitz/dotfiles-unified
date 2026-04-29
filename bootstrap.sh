@@ -40,6 +40,7 @@ Options:
   --et              Start Eternal Terminal server at login
   --claude          Install Claude Code
   --iterm           Install iTerm2 AI plugin
+  --tmux            Install tmux plugin manager (TPM) and plugins
 
 Examples:
   $(basename "$0")                  # run everything
@@ -60,6 +61,7 @@ RUN_SSH=0
 RUN_ET=0
 RUN_CLAUDE=0
 RUN_ITERM=0
+RUN_TMUX=0
 RUN_ALL=1
 
 for arg in "$@"; do
@@ -75,6 +77,7 @@ for arg in "$@"; do
         --et)          RUN_ET=1;        RUN_ALL=0 ;;
         --claude)      RUN_CLAUDE=1;    RUN_ALL=0 ;;
         --iterm)       RUN_ITERM=1;     RUN_ALL=0 ;;
+        --tmux)        RUN_TMUX=1;      RUN_ALL=0 ;;
         *) echo "Unknown option: $arg" >&2; echo "Run '$(basename "$0") --help' for usage." >&2; exit 1 ;;
     esac
 done
@@ -277,6 +280,31 @@ if should_run ITERM; then
     else
         log_skip "iTerm2 AI plugin already installed"
     fi
+fi
+
+# --- tmux plugins (TPM) ---
+if should_run TMUX; then
+    log_section "tmux plugins"
+    TPM_DIR="$HOME/.tmux/plugins/tpm"
+    if [ ! -d "$TPM_DIR" ]; then
+        log_action "Cloning TPM..."
+        git clone --depth=1 https://github.com/tmux-plugins/tpm "$TPM_DIR"
+        log_info "TPM installed"
+    else
+        log_skip "TPM already installed"
+    fi
+    log_action "Installing tmux plugins..."
+    # install_plugins reads TMUX_PLUGIN_MANAGER_PATH from a running tmux server.
+    # Start one if needed, and re-source the config to pick up TPM's env var.
+    STARTED_TMUX=0
+    if ! tmux ls >/dev/null 2>&1; then
+        tmux new-session -d -s _bootstrap_tpm
+        STARTED_TMUX=1
+    fi
+    tmux source-file "$HOME/.tmux.conf" >/dev/null 2>&1 || true
+    "$TPM_DIR/bin/install_plugins"
+    [ "$STARTED_TMUX" -eq 1 ] && tmux kill-session -t _bootstrap_tpm >/dev/null 2>&1 || true
+    log_info "tmux plugins up to date"
 fi
 
 printf "\n${BOLD}${GREEN}Bootstrap complete!${RESET}\n"
