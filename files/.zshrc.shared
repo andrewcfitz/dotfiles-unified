@@ -66,3 +66,4 @@ bindkey '^[[1;3C' forward-word     # Option+Right (xterm/iTerm2 default)
 eval "$(starship init zsh)"
 eval "$(mise activate zsh)"
 export MISE_EXPERIMENTAL=1
+export MISE_LOG_LEVEL=warn
