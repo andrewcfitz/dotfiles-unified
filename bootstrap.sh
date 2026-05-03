@@ -195,10 +195,16 @@ fi
 
 # --- Homebrew packages ---
 if should_run HOMEBREW; then
+    log_action "Updating Homebrew..."
+    brew update
+    log_action "Upgrading all formulae and casks (--greedy)..."
+    brew upgrade --greedy
     log_action "Running brew bundle (Brewfile)..."
     brew bundle --file=~/.Brewfile
     log_action "Running brew bundle (Brewfile.shared)..."
     brew bundle --file=~/.Brewfile.shared
+    log_action "Cleaning up old versions..."
+    brew cleanup
     log_info "Homebrew packages up to date"
 fi
 
