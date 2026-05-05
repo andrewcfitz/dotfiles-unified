@@ -13,6 +13,7 @@ cask "ghostty"
 cask "handy"
 cask "google-chrome"
 cask "firefox"
+cask "gitup-app"
 
 # CLI tools
 brew "eza"
@@ -37,4 +38,3 @@ brew "msedit"
 brew "git-filter-repo"
 brew "node"
 brew "lazygit"
-brew "gitup"
