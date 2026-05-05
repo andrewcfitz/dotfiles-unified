@@ -93,7 +93,7 @@ EOF
     session_name=$(__rtm_generate_name)
   fi
 
-  printf '\033]1;%s\007' "$session_name"
+  printf '\033]0;%s\007' "$session_name"
 
   local tmux_cmd="tmux attach-session -t '${session_name}' 2>/dev/null || tmux new-session -s '${session_name}' -c ~/workspace"
 
