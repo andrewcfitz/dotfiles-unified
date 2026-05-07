@@ -118,32 +118,24 @@ if should_run MACOS; then
     log_info "Dock configured"
 fi
 
-# Remove broken symlinks pointing into dotfiles (shared or local)
+# Remove broken symlinks pointing into dotfiles (shared or local).
+# Only scans directories that mirror the dotfiles tree, non-recursively at each
+# level — avoids walking huge trees like ~/Library on macOS.
 cleanup_broken_symlinks() {
     local files_dir="$1"
-    while read -r link; do
-        target=$(readlink "$link")
-        if [[ "$target" == "$files_dir/"* ]] && [ ! -e "$link" ]; then
-            read -rp "Remove broken symlink: $link? [y/N] " confirm
-            [[ "$confirm" =~ ^[Yy]$ ]] && rm "$link"
-        fi
-    done < <(find "$HOME" -maxdepth 1 -type l)
-
-    for subdir in "$files_dir"/*/; do
-        [ -d "$subdir" ] || continue
-        rel="${subdir#"$files_dir/"}"
-        rel="${rel%/}"
-        home_subdir="$HOME/$rel"
-        if [ -d "$home_subdir" ]; then
-            while read -r link; do
-                target=$(readlink "$link")
-                if [[ "$target" == "$files_dir/"* ]] && [ ! -e "$link" ]; then
-                    read -rp "Remove broken symlink: $link? [y/N] " confirm
-                    [[ "$confirm" =~ ^[Yy]$ ]] && rm "$link"
-                fi
-            done < <(find "$home_subdir" -type l)
-        fi
-    done
+    while read -r dir; do
+        rel="${dir#"$files_dir"}"
+        rel="${rel#/}"
+        home_dir="$HOME${rel:+/$rel}"
+        [ -d "$home_dir" ] || continue
+        while read -r link; do
+            target=$(readlink "$link")
+            if [[ "$target" == "$files_dir/"* ]] && [ ! -e "$link" ]; then
+                read -rp "Remove broken symlink: $link? [y/N] " confirm </dev/tty
+                [[ "$confirm" =~ ^[Yy]$ ]] && rm "$link"
+            fi
+        done < <(find "$home_dir" -maxdepth 1 -type l)
+    done < <(find "$files_dir" -type d)
 }
 
 # Symlink all files from a given files directory into $HOME
