@@ -41,6 +41,7 @@ Options:
   --claude          Install Claude Code
   --iterm           Install iTerm2 AI plugin
   --tmux            Install tmux plugin manager (TPM) and plugins
+  --local           Run repo-local bootstrap.local.sh if present
 
 Examples:
   $(basename "$0")                  # run everything
@@ -62,6 +63,7 @@ RUN_ET=0
 RUN_CLAUDE=0
 RUN_ITERM=0
 RUN_TMUX=0
+RUN_LOCAL=0
 RUN_ALL=1
 
 for arg in "$@"; do
@@ -78,6 +80,7 @@ for arg in "$@"; do
         --claude)      RUN_CLAUDE=1;    RUN_ALL=0 ;;
         --iterm)       RUN_ITERM=1;     RUN_ALL=0 ;;
         --tmux)        RUN_TMUX=1;      RUN_ALL=0 ;;
+        --local)       RUN_LOCAL=1;     RUN_ALL=0 ;;
         *) echo "Unknown option: $arg" >&2; echo "Run '$(basename "$0") --help' for usage." >&2; exit 1 ;;
     esac
 done
@@ -303,6 +306,18 @@ if should_run TMUX; then
     "$TPM_DIR/bin/install_plugins"
     [ "$STARTED_TMUX" -eq 1 ] && tmux kill-session -t _bootstrap_tpm >/dev/null 2>&1 || true
     log_info "tmux plugins up to date"
+fi
+
+# --- Repo-local hook ---
+if should_run LOCAL; then
+    LOCAL_HOOK="$DOTFILES_DIR/bootstrap.local.sh"
+    if [ -f "$LOCAL_HOOK" ]; then
+        log_section "Local ($(basename "$DOTFILES_DIR"))"
+        log_action "Running $LOCAL_HOOK..."
+        # shellcheck disable=SC1090
+        source "$LOCAL_HOOK"
+        log_info "Local hook complete"
+    fi
 fi
 
 printf "\n${BOLD}${GREEN}Bootstrap complete!${RESET}\n"
