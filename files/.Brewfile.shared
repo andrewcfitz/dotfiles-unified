@@ -39,3 +39,5 @@ brew "msedit"
 brew "git-filter-repo"
 brew "node"
 brew "lazygit"
+# Postgres client tools (psql, pg_dump, pg_restore, etc.) without the server
+brew "libpq", link: true
